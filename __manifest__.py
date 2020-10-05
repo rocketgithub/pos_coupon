@@ -2,14 +2,15 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'POS coupon gt',
+    'name': 'POS coupon',
     'version': '1.0',
     'category': 'Point of Sale',
     'sequence': 6,
-    'summary': 'POS coupon gt',
+    'summary': 'Cupones en POS',
     'description': """ Cupones en POS """,
     'author': 'Aquih',
-    'depends': ['point_of_sale','sale_coupon'],
+    'website': 'http://www.aquih.com',
+    'depends': ['pos_gt','sale_coupon'],
     'data': [
         'views/pos_config_view.xml',
         'views/templates.xml',
@@ -18,7 +19,6 @@
         'static/src/xml/pos_coupon_gt.xml',
     ],
     'installable': True,
-    'website': 'http://aquih.com',
     'auto_install': False,
 }
 
