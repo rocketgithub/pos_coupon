@@ -13,6 +13,7 @@
     'depends': ['pos_gt','sale_coupon'],
     'data': [
         'views/pos_config_view.xml',
+        'views/sale_coupon_views.xml',
         'views/templates.xml',
     ],
     'qweb': [

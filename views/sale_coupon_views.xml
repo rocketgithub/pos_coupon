@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_coupon_sale_coupon_view_tree" model="ir.ui.view">
+        <field name="name">pos_coupon.sale.coupon.tree</field>
+        <field name="model">sale.coupon</field>
+        <field name="inherit_id" ref="sale_coupon.sale_coupon_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">true</attribute>
+            </xpath>
+            <xpath expr="//tree" position="attributes">
+               <attribute name="edit">true</attribute>
+            </xpath>
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">true</attribute>
+           </xpath>
+       </field>
+    </record>
+
+</odoo>

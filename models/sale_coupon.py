@@ -12,3 +12,5 @@ class SaleCoupon(models.Model):
 
     pos_order_id = fields.Many2one('pos.order', 'Pedido de venta', readonly=True,
         help="Pedido del POS donde fué aplicado el cupón")
+    code = fields.Char(readonly=False)
+    expiration_date = fields.Date(readonly=False)
