@@ -17,7 +17,7 @@
         'views/templates.xml',
     ],
     'qweb': [
-        'static/src/xml/pos_coupon_gt.xml',
+        'static/src/xml/pos_coupon.xml',
     ],
     'installable': True,
     'auto_install': False,

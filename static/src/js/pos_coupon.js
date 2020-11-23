@@ -1,4 +1,4 @@
-odoo.define('pos_coupon_gt.pos_coupon_gt', function (require) {
+odoo.define('pos_coupon.pos_coupon', function (require) {
 "use strict";
 
 var screens = require('point_of_sale.screens');
