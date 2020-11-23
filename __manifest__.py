@@ -13,10 +13,11 @@
     'depends': ['pos_gt','sale_coupon'],
     'data': [
         'views/pos_config_view.xml',
+        'views/sale_coupon_views.xml',
         'views/templates.xml',
     ],
     'qweb': [
-        'static/src/xml/pos_coupon_gt.xml',
+        'static/src/xml/pos_coupon.xml',
     ],
     'installable': True,
     'auto_install': False,
