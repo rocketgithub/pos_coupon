@@ -175,7 +175,7 @@ var CanjearCuponesButton = screens.ActionButtonWidget.extend({
                     }
                     reward_qty = Math.min( parseInt(parseInt(max_product_qty / programa[0]['rule_min_quantity']) * programa[0]['reward_product_quantity']) , reward_product_qty);
                     var product_id = self.pos.db.get_product_by_id(programa[0]['discount_line_product_id'][0]);
-
+                    
                     order.add_product(product_id, { price: -price_unit, quantity: reward_qty, extras: { price_manually_set: true } });
                     order.get_last_orderline().set_cupon(cupon);
 

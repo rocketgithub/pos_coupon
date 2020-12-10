@@ -31,7 +31,7 @@ class PosOrder(models.Model):
         res = super(PosOrder, self)._order_fields(ui_order)
         cupones_ids = []
         for linea in res['lines']:
-            if linea[2]['cupon']:
+            if len(linea) > 1 and 'cupon' in linea[2] and linea[2]['cupon']:
                 cupones_ids.append(linea[2]['cupon']['id'])
         logging.warn(cupones_ids)
         res['cupones_ids'] = [(6,0,cupones_ids)]
