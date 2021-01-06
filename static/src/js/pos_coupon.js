@@ -41,7 +41,7 @@ var CanjearCuponesButton = screens.ActionButtonWidget.extend({
                 args: [[['code','=',codigo_cupon]] , []],
             })
             .then(function (cupon){
-                if(cupon){
+                if(cupon.length > 0){
                     error_status = self._check_coupon_code(order,cupon);
                     if ( Object.keys(error_status).length == 0){
                         self._create_reward_line(cupon[0]['program_id'][0],cupon)
@@ -66,15 +66,19 @@ var CanjearCuponesButton = screens.ActionButtonWidget.extend({
         var message = {};
 
         var creation_date_order = new Date(order['creation_date']);
-        var expiration_coupon_date = new Date(cupon[0]['expiration_date']);
 
-        if( ( ['used','expired'].includes(cupon[0]['state'])) || (expiration_coupon_date  && expiration_coupon_date <  creation_date_order) ){
-            message = {'error': 'Este cupón '+ cupon[0]['code'] +' a sido canjeado o a expirado.'}
-        }else if(cupon[0]['state'] == 'reserved'){
-            message = {'error': 'Este cupón '+cupon[0]['code'] + ' existe, pero la orden de venta de origen aún no está validada'}
-        }else if(cupon[0]['partner_id'].length > 0 && cupon[0]['partner_id'][0] != order.get_client().id){
-            message = {'error': 'El cliente no tiene acceso a esta recompensa.'}
+        if(cupon.length > 0){
+            var expiration_coupon_date = new Date(cupon[0]['expiration_date']);
+
+            if( ( ['used','expired'].includes(cupon[0]['state'])) || (expiration_coupon_date  && expiration_coupon_date <  creation_date_order) ){
+                message = {'error': 'Este cupón '+ cupon[0]['code'] +' a sido canjeado o a expirado.'}
+            }else if(cupon[0]['state'] == 'reserved'){
+                message = {'error': 'Este cupón '+cupon[0]['code'] + ' existe, pero la orden de venta de origen aún no está validada'}
+            }else if(cupon[0]['partner_id'].length > 0 && cupon[0]['partner_id'][0] != order.get_client().id){
+                message = {'error': 'El cliente no tiene acceso a esta recompensa.'}
+            }
         }
+
         return message
     },
     _create_reward_line: function(program,cupon){
@@ -175,7 +179,7 @@ var CanjearCuponesButton = screens.ActionButtonWidget.extend({
                     }
                     reward_qty = Math.min( parseInt(parseInt(max_product_qty / programa[0]['rule_min_quantity']) * programa[0]['reward_product_quantity']) , reward_product_qty);
                     var product_id = self.pos.db.get_product_by_id(programa[0]['discount_line_product_id'][0]);
-                    
+
                     order.add_product(product_id, { price: -price_unit, quantity: reward_qty, extras: { price_manually_set: true } });
                     order.get_last_orderline().set_cupon(cupon);
 

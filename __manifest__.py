@@ -12,6 +12,7 @@
     'website': 'http://www.aquih.com',
     'depends': ['pos_gt','sale_coupon'],
     'data': [
+        'security/ir.model.access.csv',
         'views/pos_config_view.xml',
         'views/sale_coupon_views.xml',
         'views/templates.xml',
