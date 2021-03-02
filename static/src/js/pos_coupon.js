@@ -95,16 +95,26 @@ var CanjearCuponesButton = screens.ActionButtonWidget.extend({
             .then(function (programa){
                 if(programa[0]['reward_type'] == 'discount'){
                     res_discount = self._get_reward_values_discount(programa)
-                    order.add_product(res_discount['product_id'], { price: res_discount['price_unit'], quantity: res_discount['quantity'], extras: { price_manually_set: true } });
-                    order.get_last_orderline().set_cupon(cupon);
-                    rpc.query({
-                            model: 'pos.order',
-                            method: 'estado_cupon',
-                            args: [[],cupon,['used']],
-                        })
-                        .then(function (estado){
+                    if(res_discount['product_id']){
+                        order.add_product(res_discount['product_id'], { price: res_discount['price_unit'], quantity: res_discount['quantity'], extras: { price_manually_set: true } });
+                        order.get_last_orderline().set_cupon(cupon);
+                        rpc.query({
+                                model: 'pos.order',
+                                method: 'estado_cupon',
+                                args: [[],cupon,['used']],
+                            })
+                            .then(function (estado){
 
+                            });
+
+                    }else{
+
+                        self.pos.gui.show_popup("error",{
+                            "title": "Error",
+                            "body":  "Debe de existir el producto",
                         });
+                    }
+
                 }
                 else if(programa[0]['reward_type'] == 'product'){
                     res_product = self._get_reward_values_product(programa,cupon)
@@ -124,6 +134,47 @@ var CanjearCuponesButton = screens.ActionButtonWidget.extend({
 
             }
         }
+        if(['specific_product', 'on_order'].includes(programa[0]['discount_apply_on'])){
+            if (programa[0]['discount_apply_on'] == 'specific_product'){
+                var order = this.pos.get_order();
+                var existe_producto_desc = false;
+                var price_unit = 0;
+                var linea = 0;
+                order.get_orderlines().forEach(function (orderline) {
+                    if (orderline.get_product().id == programa[0]['discount_specific_product_id'][0]){
+                        price_unit = orderline.get_price_with_tax();
+                        existe_producto_desc = true;
+                        linea = orderline;
+                    }
+                });
+
+
+                if(existe_producto_desc){
+                    var product_id = this.pos.db.get_product_by_id(programa[0]['discount_line_product_id'][0]);
+
+                    return {
+                        'product_id': product_id,
+                        'quantity': 1,
+                        'price_unit': - self._get_reward_values_discount_percentage_per_line(programa,linea)
+
+                    }
+
+
+                }else{
+                    return {
+                        'product_id': false,
+                        'quantity': 0,
+                        'price_unit': 0
+
+                    }
+
+                }
+
+
+
+            }
+        }
+
 
     },
 
@@ -207,6 +258,11 @@ var CanjearCuponesButton = screens.ActionButtonWidget.extend({
             total += orderline.get_price_with_tax()
         });
         return total
+    },
+    _get_reward_values_discount_percentage_per_line: function(program,line){
+      var discount_amount = line.quantity * line.price * (program[0]['discount_percentage'] / 100);
+      return discount_amount
+
     },
     _get_reward_values_discount_fixed_amount: function(programa){
         var order = this.pos.get_order();
